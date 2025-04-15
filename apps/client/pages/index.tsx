@@ -86,26 +86,26 @@ export default function Home() {
   }
 
   const stats = [
-    { name: t("open_tickets"), stat: openTickets, href: "/tickets" },
+    { name: "Open Issues", stat: openTickets, href: "/issues" },
     {
-      name: t("completed_tickets"),
+      name: "Completed Issues",
       stat: completedTickets,
-      href: "/tickets?filter=closed",
+      href: "/issues?filter=closed",
     },
     {
-      name: t("unassigned_tickets"),
+      name: "Unassigned Issues",
       stat: unassigned,
-      href: "/tickets?filter=unassigned",
+      href: "/issues?filter=unassigned",
     },
   ];
 
   async function datafetch() {
     Promise.all([
       fetchTickets(),
-      // getOpenTickets(),
-      // getCompletedTickets(),
-      // getUnassginedTickets()
-    ])
+      getOpenTickets(),
+      getCompletedTickets(),
+      getUnassginedTickets(),
+    ]);
     await setLoading(false);
   }
 
@@ -117,6 +117,15 @@ export default function Home() {
   return (
     <div className="flex flex-col xl:flex-row p-8 justify-center w-full">
       <div className="w-full xl:w-[70%] max-w-5xl">
+        <div className="block sm:hidden mb-4">
+          {user.isAdmin && (
+            <Link href="https://github.com/Peppermint-Lab/peppermint/releases">
+              <span className="inline-flex items-center rounded-md bg-green-700/10 px-3 py-2 text-xs font-medium text-green-600 ring-1 ring-inset ring-green-500/20">
+                Version {process.env.NEXT_PUBLIC_CLIENT_VERSION}
+              </span>
+            </Link>
+          )}
+        </div>
         {!loading && (
           <>
             <div>
@@ -145,7 +154,6 @@ export default function Home() {
                   <button
                     type="button"
                     className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                    onClick={() => router.push("/new")}
                   >
                     <svg
                       className="mx-auto h-12 w-12 text-gray-400 dark:text-white"
@@ -162,15 +170,13 @@ export default function Home() {
                       />
                     </svg>
                     <span className="mt-2 block text-sm font-semibold text-gray-900 dark:text-white">
-                      Create your first ticket
+                      Create your first Issue
                     </span>
                   </button>
                 </>
               ) : (
                 <>
-                  <span className="font-bold text-2xl">
-                    {t("recent_tickets")}
-                  </span>
+                  <span className="font-bold text-2xl">Recent Issues</span>
                   <div className="-mx-4 sm:-mx-0 w-full">
                     <table className="min-w-full divide-y divide-gray-300">
                       <thead>
@@ -214,7 +220,7 @@ export default function Home() {
                             <tr
                               key={item.id}
                               className="hover:bg-gray-300 dark:hover:bg-green-600 hover:cursor-pointer"
-                              onClick={() => router.push(`/ticket/${item.id}`)}
+                              onClick={() => router.push(`/issue/${item.id}`)}
                             >
                               <td className="sm:max-w-[280px] 2xl:max-w-[720px] truncate py-1 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-white sm:pl-0">
                                 {item.title}
@@ -277,7 +283,6 @@ export default function Home() {
                               <td className="px-3 py-1 text-sm text-gray-500 w-[130px] dark:text-white truncate whitespace-nowrap">
                                 {item.assignedTo ? item.assignedTo.name : "-"}
                               </td>
-                             
                             </tr>
                           ))}
                       </tbody>
@@ -289,7 +294,6 @@ export default function Home() {
           </>
         )}
       </div>
-
     </div>
   );
 }

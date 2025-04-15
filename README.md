@@ -18,12 +18,6 @@
 
 > Ticket Management System in order to help helpdesks & service desks manage internal staff & customer requests
 
-## Introduction
-
-<p align="center">
-It's a self hosted alternative to popular services such as zendesk
-</p>
-
 ## ✨ Features
 
 - **Ticket Creation**: Bog standard ticket creation with a markdown editor and file uploads
@@ -63,11 +57,6 @@ services:
     restart: always
     depends_on:
       - peppermint_postgres
-    healthcheck:
-      test: ["CMD", "sh", "-c", "wget --spider $$API_URL"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     environment:
       DB_USERNAME: "peppermint"
       DB_PASSWORD: "1234"
@@ -91,6 +80,7 @@ admin@admin.com
 ## One click installers
 
 - We are now on linode marketplace we can be viewed here <a href="https://www.linode.com/marketplace/apps/peppermint-lab/peppermint/">here</a>
+- We have a one line installer for Ubuntu and Debian (for the moment) and can be viewed here <a href="https://spearmint.sh/">here</a>
 
 ## Documentation
 
